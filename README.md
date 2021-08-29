@@ -121,12 +121,63 @@ Route::get('/admin/posts/example' ,array('as' => 'admin.home', function(){
 
 - php artisan route:list
 
+**calling controller from route**
 
-###Controllers
+```php
+Route::get('/about/{id}', '\App\Http\Controllers\PostController@index');
+```
+
+**resource routes**
+
+You can create resource routes
+
+- Route::resource('posts', '\App\Http\Controllers\PostController');
+
+try php artisan route:list
+
+This route will automatically route posts/create posts/{postID} .. (you can check the available route when listing)
+
+### Controllers
 
 Controllers are like a middleman between the model and the view.
 
 - php artisan make:controller
 - php artisan make:controller --resource PostController(this will add all CRUD methods by default to your newly created controller)
 
+### Views
 
+```php
+  public function contact() {
+        return view('contact');
+    }
+```
+
+This will render the contact view.
+
+**passing variables to view**
+
+**Passing 1 variable**
+
+```php
+public function showPost($id, $name, $password) {
+       return view('post')->with('id', $id);
+}
+```
+**example route used**
+
+```php
+Route::get('post/{id}/{name}/{password}', '\App\Http\Controllers\PostController@showPost');
+```
+
+**Preferred method, passing multiple variable**
+
+Laravel will automatically transfer the var names into variables and pass it to the view
+```php
+  public function showPost($id, $name, $password) {
+        return view('post', compact('id','name','password'));
+    }
+```
+
+You can read the values from the view using 
+
+  <h1>Post id is {{$id}} name is {{$name}} password is {{$password}}</h1>
