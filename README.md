@@ -9,7 +9,35 @@
 
 </details>
 
+###Commands
 
+| Function  | Command |
+| ------------- | ------------- |
+| Create laravel project  | composer create-project laravel/laravel example-app  |
+| Install laravel globally, you can use laravel new testLarvel after  | composer global require laravel/installer  |
+| Start local PHP server | php artisan serve |
+| List available routes | php artisan route:list |
+| Create controller | php artisan make:controller |
+| Create Controler with default CRUD methods | php artisan make:controller --resource PostController |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
+| ------------- | ------------- |
 
 ### Windows env mySQl
 
@@ -60,7 +88,7 @@ This command will run a local PHP server.
 
 
 
-### Routing
+### Routes
 
 **old laravel version**
 app/http/routes
@@ -79,15 +107,26 @@ return "id is $id, name is $name";
 });
 ```
 
+**named route**
 
+You can view the routes using php aritsan route:list
+```php
+Route::get('/admin/posts/example' ,array('as' => 'admin.home', function(){
+
+    $url = route('admin.home');
+    return "this url is $url";
+}));
+```
 **listing available routes**
 
 - php artisan route:list
 
 
+###Controllers
 
+Controllers are like a middleman between the model and the view.
 
-
-
+- php artisan make:controller
+- php artisan make:controller --resource PostController(this will add all CRUD methods by default to your newly created controller)
 
 
