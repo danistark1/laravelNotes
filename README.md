@@ -35,7 +35,7 @@ next time you need to create a project, you can issue this command
 
 ### Local artisan PHP server
 
-- php artisan server
+- php artisan serve
 
 This command will run a local PHP server.
 
@@ -69,7 +69,20 @@ app/http/routes
 routes/web.php
 
 
+**adding a route**
 
+From web.php add
+
+```php
+Route::get('/admin/{id}/{name}', function($id,$name) {
+return "id is $id, name is $name";
+});
+```
+
+
+**listing available routes**
+
+- php artisan route:list
 
 
 
