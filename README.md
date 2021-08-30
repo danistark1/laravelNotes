@@ -146,6 +146,8 @@ Controllers are like a middleman between the model and the view.
 
 ### Views
 
+Laravel using blade templating engine.
+
 ```php
   public function contact() {
         return view('contact');
@@ -180,4 +182,24 @@ Laravel will automatically transfer the var names into variables and pass it to 
 
 You can read the values from the view using 
 
-  <h1>Post id is {{$id}} name is {{$name}} password is {{$password}}</h1>
+```<h1>Post id is {{$id}} name is {{$name}} password is {{$password}}</h1>```
+
+
+**blade loops and conditionals**
+
+```blade
+ <h1>Contact Page</h1>
+    @if(count($people))
+        <ul>
+        @foreach($people as $person)
+            <li>{{$person}}</li>
+        @endforeach
+        </ul>
+    @endif
+```
+
+### .env .env.example
+
+When you ship your application, you want users to know which application configuration to use/setup. You include .env.example file with default configuration.
+You can keep your sensitive passworrds and logins in .env for your local development.
+
