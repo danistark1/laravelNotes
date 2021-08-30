@@ -258,3 +258,25 @@ If you update a field ex default values changes, you can issue this command to u
 To know which migration files already ran
 
 - php artisan migrate:status
+
+
+### Raw SQL Queries
+
+```
+use Illuminate\Support\Facades\DB;
+```
+
+```php
+Route::get('/insert/', function() {
+    DB::insert('insert into posts(title,body) values(?,?)', ['php with laravel', 'laravel framework']);
+});
+
+
+Route::get('/get/', function() {
+    $result = DB::select('select * from  posts where id = ?', [1]);
+    foreach($result as $post) {
+        return $post->title;
+    }
+});
+```
+
