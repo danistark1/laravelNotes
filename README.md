@@ -19,13 +19,13 @@
 | List available routes | php artisan route:list |
 | Create controller | php artisan make:controller |
 | Create Controler with default CRUD methods | php artisan make:controller --resource PostController |
-| ------------- | ------------- |
-| ------------- | ------------- |
-| ------------- | ------------- |
-| ------------- | ------------- |
-| ------------- | ------------- |
-| ------------- | ------------- |
-| ------------- | ------------- |
+| Create a new migration/table| php artisan make:migration create_posts_table --create="posts" |
+| Run the migration file | php artisan migrate |
+| Available artisan commands | php artisan|
+| Rollback to the previous migration file | php artisan migrate:rollback |
+| Add column to existing table | php artisan make:migration add_is_admin_column_to_posts_table --table="posts"  |
+| Reset migration files | php artisan migrate:reset |
+| Check which migration files already ran | php artisan migrate:status |
 | ------------- | ------------- |
 | ------------- | ------------- |
 | ------------- | ------------- |
@@ -203,3 +203,58 @@ You can read the values from the view using
 When you ship your application, you want users to know which application configuration to use/setup. You include .env.example file with default configuration.
 You can keep your sensitive passworrds and logins in .env for your local development.
 
+
+### Migration
+
+**create table**
+Create a database, and set the correct credentials in .env file.
+
+Run the command, this will create a new migration file, for posts table.
+
+- php artisan make:migration create_posts_table --create="posts"
+
+head over to the newly created migration file, you can add new fields to the table, ex.
+
+```php
+   $table->string('title');
+   $table->text('body')
+ ```
+ **update table fields**
+ once done, issue this command to add those fields
+ 
+ - php artisan migrate
+
+**rollback to previous migration**
+
+- php artisan migrate:rollback
+
+**adding columns to existing table**
+
+- php artisan make:migration add_is_admin_column_to_posts_table --table="posts" 
+
+now go to the created migration file, add the new column, also include the column in the down() ft. 
+
+```php
+$table->dropColumn('isAdmin');
+```
+
+After that, issue the command, php artisan migrate, the new column should now be added without having to drop the table and its records.
+
+
+**migration reset**
+
+To clear all migration files
+
+- php artisan migrate:reset
+
+**updating fields without dropping everything**
+
+If you update a field ex default values changes, you can issue this command to update the migration
+
+- php artisan migrate:refresh
+
+**migration status**
+
+To know which migration files already ran
+
+- php artisan migrate:status
