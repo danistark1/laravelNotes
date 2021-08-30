@@ -13,6 +13,7 @@
 
 | Function  | Command |
 | ------------- | ------------- |
+| Laravel Version | php artisan ==version |
 | Create laravel project  | composer create-project laravel/laravel example-app  |
 | Install laravel globally, you can use laravel new testLarvel after  | composer global require laravel/installer  |
 | Start local PHP server | php artisan serve |
@@ -38,6 +39,10 @@
 | ------------- | ------------- |
 | ------------- | ------------- |
 | ------------- | ------------- |
+
+### Laravel version
+
+= php artisan --version
 
 ### Windows env mySQl
 
@@ -280,3 +285,96 @@ Route::get('/get/', function() {
 });
 ```
 
+### Models
+
+- php artisan make:model PostModel -m (-m if you need to create its migration)
+
+Model name will be the table name in the database, so if you create a Post model, and run migration, it will create the post table.
+
+You can override the table name in the model by adding a protected property $table = 'tableName';
+You can also override $primaryKey the same way.
+
+### Eloquent / ORM
+
+**get**
+
+```php
+  $result  = sensors::where('id',1)->orderBy('id','desc')->take(1)->get();
+```
+
+**insert**
+
+```php
+  $sensor = new sensors();
+  $sensor->name = 'test sensor';
+  $sensor->save();
+
+
+You can also use a shorthand method 
+
+```php
+   sensors::create(['name' => 'this is a name']);
+ ```
+
+But in this case you need to add a property to the sensor model in this case to tell it that the name property is fillable.
+
+```php
+  protected $fillable = [
+        'name'
+    ];
+ ```
+
+**update**
+
+```php
+    $sensor = sensors::find($id);
+    $sensor->name = $name;
+    $sensor->save();
+ ```
+ or
+ 
+ ```php
+  sensors::where('id', 2)->where('name', 'test sensor')->update(['name'=>'test sensor updated']);
+ ```
+ 
+ **delete**
+ 
+ ```php
+  $post = sensors::find(1);
+    $post->delete();
+
+```
+
+or
+
+```php
+ sensors::destroy(2);
+```
+
+**soft delete**
+
+Soft delete will keep a copy of the record in the trash, to implement this feature, you need to add a deleted_at field to the model then implement the soft delete.
+
+add this propert
+
+```php  
+   use Illuminate\Database\Eloquent\SoftDeletes;
+   use SoftDeletes;
+  
+  protected $date = ['deleted_at'];
+```
+ run migrate to add the newly added deleted_at field.
+ 
+ now anytime you call the delete/destroy method, the record will still be in the db with a deleted_at.
+ 
+ **restore a soft deleted record**
+ 
+  return sensors::withTrashed()->where('id', 3)->restore();
+  
+  
+ **hard delete**
+ 
+ If soft delete is implemented, then to hard delete you need to force delete it.
+ 
+ - sensors::withTrashed()->where('id', 3)->forceDelete();
+ 
