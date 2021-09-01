@@ -13,7 +13,7 @@
 
 | Function  | Command |
 | ------------- | ------------- |
-| Laravel Version | php artisan ==version |
+| Laravel Version | php artisan --version |
 | Create laravel project  | composer create-project laravel/laravel example-app  |
 | Install laravel globally, you can use laravel new testLarvel after  | composer global require laravel/installer  |
 | Start local PHP server | php artisan serve |
@@ -378,3 +378,8 @@ add this propert
  
  - sensors::withTrashed()->where('id', 3)->forceDelete();
  
+
+### Relationships
+
+**one-to-one**
+
