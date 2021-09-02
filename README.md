@@ -383,3 +383,72 @@ add this propert
 
 **one-to-one**
 
+Ex.we need to be able to get user's posts, for that you need to update the post migration table to add a user_id
+ $table->integer('user_id')->unsigned();
+ 
+ then in the user model, add this function
+ 
+ ```php
+  public function post() {
+        return $this->hasOne('App\Models\Post');
+    }
+ ```
+ 
+ You can now get user's post by calling
+ 
+ - User::find($id)->post;
+
+**inverse relation**
+
+Given a post, get me that post's user info.
+
+from the post model, add this
+
+```php
+  public function user() {
+        return $this->belongsTo('App\Models\User');
+    }
+    
+Route::get('/post/{id}/user', function ($id) {
+    return Post::find($id)->user->name;
+});
+```
+
+This i will get the post's user name.
+
+**one-to-many**
+to get all posts
+
+```php
+ public function posts() {
+        return $this->hasMany('App\Models\Post');
+    }
+```
+
+**many-to-many(pivot tables)**
+
+We want to assign roles to users, for that create a roles model
+
+- php artisan make:model Role -m
+
+Now create the pivot table, laravel will understand this is a pivot table if you follow this command convention
+
+- php artisan make:migration create_users_roles_table --create=role_user
+
+- update the roles table, add a name field
+- update the role_user table add user_id, role_id
+
+in the user model add
+
+```php
+ public function roles() {
+        return $this->belongsToMany('App\Models\Role');
+    }
+ ```
+ 
+ You can now find user's role by user's id 
+ 
+ -    return User::find($id)->roles;
+
+
+
