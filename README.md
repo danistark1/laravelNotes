@@ -425,7 +425,7 @@ to get all posts
     }
 ```
 
-**many-to-many(pivot tables)**
+**many-to-many(pivot tables - relating tables together)**
 
 We want to assign roles to users, for that create a roles model
 
@@ -446,9 +446,82 @@ in the user model add
     }
  ```
  
+if you follow naming convention, table is named alaphabetically, users_roles, if for example it was named something else then we need to manually define the relationship 
+return $this->belongsToMany('App\Models\Role', 'user_role', 'user_id','role_id);
+ 
  You can now find user's role by user's id 
  
  -    return User::find($id)->roles;
 
+**has-many-through**
+
+ex. create a new country table, update user's table to have a country_id. (posts table is already linked to users)
+from the country model we can add this ft.
+
+given a country_id, i can get a user's posts
+
+
+In the below ft., to get the post, i need to go through the user. In this case, laravel will automatically look for country_id in user table.
+
+```php
+  public function posts() {
+        return $this->hasManyThrough('App\Models\Post', 'App\Models\User');
+        //  return $this->hasManyThrough('App\Models\Post', 'App\Models\User', 'country_id', 'user_id'); // no need to add those primary keys if they are default, laravel will find them.
+    }
+ ```
+
+```php
+Route::get('/user/country/{id}', function ($id) {
+    $country = Country::find($id);
+    foreach($country->posts as $post) {
+        return $post->name;
+    }
+});
+```
+
+**polymorphic-relation**
+
+You can have users table and posts table relate to a photos table.
+
+To do so create a new Photos model with migration
+
+```php
+   $table->string('path');
+   $table->integer('imageable_id'); // laravel convention
+   $table->string('imageable_type'); // this should be the model the photo related to, it could be any model.
+```
+
+In the user's model you can add this function that will return photos by this user.
+
+```php
+ public function photos() {
+        return $this->morphMany('App\Models\Photo', 'imageable');
+    }
+```
+
+in the photos table, the field Photo.imageable_type should be the path the the model this photo related to ex. App\Models\Post or App\Models\User
+
+To get photos by a post, you can do the same for a user.
+
+```php
+Route::get('/post/photo/{id}', function($id) {
+    $post = Post::find($id);
+    return $post->photos;
+});
+```
+
+**polymorphic-relation-inverse**
+To get the Photos related Model record, you can do this
+
+```php
+Route::get('/photo/{id}/post', function($id) {
+    $photo = Photo::findOrFail($id);
+    return $photo->imageable;
+});
+```
+
+//photo->imageable; gets the related record.
+
+**polymorphic-relation-many-to-many**
 
 
