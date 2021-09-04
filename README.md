@@ -438,6 +438,9 @@ Now create the pivot table, laravel will understand this is a pivot table if you
 - update the roles table, add a name field
 - update the role_user table add user_id, role_id
 
+
+With a many-to-many relationship you can get, insert, update and delete user's roles using the relation.
+
 in the user model add
 
 ```php
@@ -452,6 +455,70 @@ return $this->belongsToMany('App\Models\Role', 'user_role', 'user_id','role_id);
  You can now find user's role by user's id 
  
  -    return User::find($id)->roles;
+
+**get**
+
+```php
+Route::get('/get', function () {
+    $users = User::find(1);
+    foreach($users->roles as $role ) {
+       return $role;
+    }
+});
+```
+
+**insert**
+
+```php
+    $user = User::find(1);
+    $role = new Role(['name' => 'administrator']);
+    $user->roles()->save($role);
+```
+
+**update**
+
+```php
+ $user = User::find(1);
+    if ($user->has('roles')) {
+        foreach($user->roles as $role) {
+            if ($role->name ==='administrator') {
+                $role->name = 'member';
+                $role->save();
+            }
+        }
+    }
+ ```
+ 
+ **delete**
+ 
+ ```php
+    $user = User::find(1);
+    $user->roles()->delete();
+```
+
+**attach/detach**
+
+You can add a role using the attach method (even if the role is assigned to the user, this method will still insert the role)
+```php
+//attach
+    $user = User::find(1);
+    $user->roles()->attach($id);
+    
+//detach
+     $user = User::find(1);
+    $user->roles()->dettach($id);
+```
+**sync**
+
+You can assign multiple roles to the user using sync method (this method will insert new record in role_user table, doesn't check if the role exist is Roles table)
+
+```php
+  $user = User::find(1);
+    $user->roles()->sync([1,2,3,4,5,6]);
+```
+
+In the above call, the user will be asigned the roles [1,2,3,4,5,6], if they user has other roles asigned, they will get removed.
+
 
 **has-many-through**
 
