@@ -463,6 +463,8 @@ given a country_id, i can get a user's posts
 
 In the below ft., to get the post, i need to go through the user. In this case, laravel will automatically look for country_id in user table.
 
+In the country model, add this ft.
+
 ```php
   public function posts() {
         return $this->hasManyThrough('App\Models\Post', 'App\Models\User');
@@ -522,6 +524,10 @@ Route::get('/photo/{id}/post', function($id) {
 
 //photo->imageable; gets the related record.
 
-**polymorphic-relation-many-to-many**
+### Tinker
 
+You use tinker to directly make calls to models for ex, to create, delete or update records
+
+- $post  = App\Models\Post::find(1)->delete()
+- $post  = App\Models\Post::create(['name' => 'test name', 'content' => 'test content from tinker'])
 
