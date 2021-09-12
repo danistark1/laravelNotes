@@ -652,3 +652,24 @@ You use tinker to directly make calls to models for ex, to create, delete or upd
 - $post  = App\Models\Post::find(1)->delete()
 - $post  = App\Models\Post::create(['name' => 'test name', 'content' => 'test content from tinker'])
 
+
+### Caching
+
+By default laravel is configured to use file cache, you can change that from /config/cache
+
+**get**
+// Here we try to look for a cache using the key and by selecting "file" as the file for cache lookup.
+- $value = Cache::store('file')->has("$lookupKey");
+
+**store**
+
+// cacheKey, cacheValue, #mins
+- Cache::put("$lookupKey", $valueDb, 525600);
+      
+**delete-all**
+
+- Cache::flush();
+
+**delete-key**
+ 
+- Cache::forget("$lookupKey");
