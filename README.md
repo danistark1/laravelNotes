@@ -122,6 +122,60 @@ Route::get('/admin/posts/example' ,array('as' => 'admin.home', function(){
     return "this url is $url";
 }));
 ```
+
+
+**optional route parameters**
+
+This will match user or user/whatever is passed
+```php
+$router->get('user[/{name}]', function ($name = null) {
+    return $name;
+});
+```
+
+**regular expression**
+
+```php
+$router->get('user/{name:[A-Za-z]+}', function ($name) {
+    //
+});
+```
+
+**passing route params to controller**
+
+- Route::get('/sensorgateway/lrv/{id}', [\App\Http\Controllers\sensorController::class,'show']);
+
+
+**route groups**
+
+You might need to group routes attributes that are used for more than 1 routes.
+
+ex, when you want to call a middleware in multiple routes.
+
+**grouping with middleware**
+
+```php
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->get('/', function () {
+        // Uses Auth Middleware
+    });
+
+    $router->get('user/profile', function () {
+        // Uses Auth Middleware
+    });
+});
+```
+
+**grouping when prexing apis**
+
+```php
+$router->group(['prefix' => 'admin'], function () use ($router) {
+    $router->get('users', function () {
+        // Matches The "/admin/users" URL
+    });
+});
+```
+
 **listing available routes**
 
 - php artisan route:list
