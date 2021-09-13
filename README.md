@@ -19,6 +19,7 @@
 | Start local PHP server | php artisan serve |
 | List available routes | php artisan route:list |
 | Create controller | php artisan make:controller |
+| Create controller, migration and model | php artisan make:model Product -rcm |
 | Create Controler with default CRUD methods | php artisan make:controller --resource PostController |
 | Create a new migration/table| php artisan make:migration create_posts_table --create="posts" |
 | Run the migration file | php artisan migrate |
