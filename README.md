@@ -674,3 +674,47 @@ By default laravel is configured to use file cache, you can change that from /co
 **delete-key**
  
 - Cache::forget("$lookupKey");
+
+### Query Builder
+
+**retreiving all rows**
+
+```php
+use Illuminate\Support\Facades\DB;
+
+$users = DB::table('users')->get();
+
+foreach ($users as $user) {
+    echo $user->name;
+}
+```
+
+**retreiving a single row**
+
+```php
+$user = DB::table('users')->where('name', 'John')->first();
+```
+
+or if you want to retreive the value of a column
+
+````php
+$email = DB::table('users')->where('name', 'John')->value('email')
+```
+
+**retreiving single row by id column**
+
+```php
+$user = DB::table('users')->find(3);
+```
+
+**retreiving a list of column values**
+
+In this example, you will retreive a collection containg only title column
+
+```php
+$titles = DB::table('users')->pluck('title');
+
+foreach ($titles as $title) {
+    echo $title;
+}
+```
