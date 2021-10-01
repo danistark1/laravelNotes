@@ -763,7 +763,7 @@ $users = DB::table('users')
 
 **distinct**
 
-``php
+```php
 $users = DB::table('users')->distinct()->get();
 ```
 
