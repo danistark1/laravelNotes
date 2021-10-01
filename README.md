@@ -697,7 +697,7 @@ $user = DB::table('users')->where('name', 'John')->first();
 
 or if you want to retreive the value of a column
 
-````php
+```php
 $email = DB::table('users')->where('name', 'John')->value('email')
 ```
 
