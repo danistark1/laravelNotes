@@ -718,3 +718,110 @@ foreach ($titles as $title) {
     echo $title;
 }
 ```
+
+**chunking results**
+
+This method retrieves a small chunk of results at a time and feeds each chunk into a closure for processing.
+You may stop the processing of chuncks by retuning false.
+```php
+DB::table('users')->orderBy('id')->chunk(100, function ($users) {
+    foreach ($users as $user) {
+        //
+    }
+});
+```
+
+**aggregates**
+
+```php
+$users = DB::table('users')->count();
+
+$price = DB::table('orders')->max('price');
+```
+
+**determining if record exists**
+
+```php
+if (DB::table('orders')->where('finalized', 1)->exists()) {
+    // ...
+}
+
+if (DB::table('orders')->where('finalized', 1)->doesntExist()) {
+    // ...
+}
+```
+
+**selects**
+
+You may not always want to select all columns
+
+```php
+$users = DB::table('users')
+            ->select('name', 'email as user_email')
+            ->get();
+```
+
+**distinct**
+
+``php
+$users = DB::table('users')->distinct()->get();
+```
+
+**adding to already created query builder instance***
+
+```php
+$query = DB::table('users')->select('name');
+
+$users = $query->addSelect('age')->get();
+```
+
+**raw expressions**
+
+You may sometimes need to insert arbitrary strings into a query, these statements are injected into the query, so you need to be very careful to avoid creating sql injection vulnerabilities.
+
+```php
+$users = DB::table('users')
+             ->select(DB::raw('count(*) as user_count, status'))
+             ->where('status', '<>', 1)
+             ->groupBy('status')
+             ->get();
+ ```
+ 
+ **raw methods**
+ 
+ The selectRaw method can be used in place of addSelect(DB::raw(...)). This method accepts an optional array of bindings as its second argument.
+ 
+ ```php
+ $orders = DB::table('orders')
+                ->selectRaw('price * ? as price_with_tax', [1.0825])
+                ->get();
+```
+
+**whereRaw/orWhereRaw**
+
+```php
+$orders = DB::table('orders')
+                ->whereRaw('price > IF(state = "TX", ?, 100)', [200])
+                ->get();
+```
+
+**havingRaw / orHavingRaw**
+
+```php
+$orders = DB::table('orders')
+                ->select('department', DB::raw('SUM(price) as total_sales'))
+                ->groupBy('department')
+                ->havingRaw('SUM(price) > ?', [2500])
+                ->get();
+```
+
+**orderByRaw**
+
+```php
+$orders = DB::table('orders')
+                ->orderByRaw('updated_at - created_at DESC')
+                ->get();
+```
+
+
+
