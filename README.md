@@ -823,5 +823,66 @@ $orders = DB::table('orders')
                 ->get();
 ```
 
+### Telescope Configuration
 
+Telescope provides insight into the requests coming into your application, exceptions, log entries, database queries, queued jobs, mail, notifications, cache operations, scheduled tasks, variable dumps, and more.
 
+- composer require laravel/telescope --dev (local only)
+- php artisan telescope:install
+- php artisan migrate
+
+from config/app.php remove TelescopeServiceProvider service provider registration
+manually register Telescope's service providers in the register method of your App\Providers\AppServiceProvider class. We will ensure the current environment is local before registering the providers:
+
+```php
+/**
+ * Register any application services.
+ *
+ * @return void
+ */
+public function register()
+{
+    if ($this->app->environment('local')) {
+        $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
+        $this->app->register(TelescopeServiceProvider::class);
+    }
+}
+```
+
+Finally, you should also prevent the Telescope package from being auto-discovered by adding the following to your composer.json file:
+
+```json
+"extra": {
+    "laravel": {
+        "dont-discover": [
+            "laravel/telescope"
+        ]
+    }
+},
+```
+
+**config**
+
+'enabled' => env('TELESCOPE_ENABLED', true),
+
+**localhost fix**
+
+copy layout.blade.php from  
+
+project_directory/vendor/laravel/telescope/resources/views/layout.blade.php
+
+to
+
+project_directory/resources/views/vendor/telescope/layout.blade.php 
+
+update 
+
+```
+<!-- Global Telescope Object -->
+<script>
+    window.Telescope = @json($telescopeScriptVariables);
+
+    var telescopePath = "{{ ltrim(parse_url(url(config('telescope.path')))['path'], '/') }}";
+    window.Telescope.path = telescopePath;
+</script>
+```
