@@ -886,3 +886,38 @@ update
     window.Telescope.path = telescopePath;
 </script>
 ```
+
+### Scheduler
+In the past, you may have written a cron configuration entry for each task you needed to schedule on your server.
+The scheduler allows you to fluently and expressively define your command schedule within your Laravel application itself.When using the scheduler, only a single cron entry is needed on your server. 
+
+From app/Console/Kernel.php
+
+```php
+  /**
+     * Define the application's command schedule.
+     *
+     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @return void
+     */
+    protected function schedule(Schedule $schedule)
+    {
+        // $schedule->command('inspire')->hourly();
+
+        $schedule->call(function () {
+            // Schedule to delete telescope entries.
+            DB::table('telescope_entries')->delete();
+            DB::table('telescope_entries_tags')->delete();
+            DB::table('telescope_monitoring ')->delete();
+        })->everyFourMinutes();
+    }
+    
+ ```
+ 
+ to run the scheduler worker to test this , you can 
+ 
+ - php artisan schedule:work
+
+In reality, you need to create a cron job on the server for this.
+
+You can run a cron on the server for ex. * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
