@@ -921,3 +921,40 @@ From app/Console/Kernel.php
 In reality, you need to create a cron job on the server for this.
 
 You can run a cron on the server for ex. * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
+
+
+
+### Queue
+
+For web requests tasks that require long time to complete, you can send the long running tasks to a queue. A can use Amason SQS, Redis or even a database queue.
+
+**Sync queue**
+
+For local developmene, you can use the synchronus queue to send jobs immedietly. This is only used for development purposes.
+
+**default queue**
+
+Each connection configuration in queue config file, contains a queue attribute which is the default queue that will be used the default configuration will be used if when you dispatch a job, no queue is seleted.
+
+
+**multiple queues**
+
+You may want to have multiple queues, laravel allows you to specify a priority for each queue.Laravel queue workers will then process jobs by priority.
+
+
+php artisan make:job ProcessPodcast The generated class will implement the shouldQueue interface, indicating to Laravel that the job should be pushed onto the queue to run asynchronously.
+
+**VERY IMPORTANT**
+
+run php artisan config:clear when changing any config to take effect
+
+**running the queue**
+
+php artisan queue:listen
+
+When this is run, whatever jon in the jobs table will be executed, then removed from the table, if for any reason the job couldnt be executed, then there record will stay in the jobs table and its attempts will be incremented.
+
+This should be configured as a cron job.
+
+
+
