@@ -886,6 +886,7 @@ update
     window.Telescope.path = telescopePath;
 </script>
 ```
+OR TRY  php artisan vendor:publish (this should be able to copy to vendor directory)
 
 ### Scheduler
 In the past, you may have written a cron configuration entry for each task you needed to schedule on your server.
