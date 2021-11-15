@@ -958,4 +958,18 @@ When this is run, whatever jon in the jobs table will be executed, then removed 
 This should be configured as a cron job.
 
 
+### Unit Testing 
 
+By default, your application's tests directory contains two directories: Feature and Unit. Unit tests are tests that focus on a very small, isolated portion of your code. In fact, most unit tests probably focus on a single method. Tests within your "Unit" test directory do not boot your Laravel application and therefore are unable to access your application's database or other framework services.
+
+Feature tests may test a larger portion of your code, including how several objects interact with each other or even a full HTTP request to a JSON endpoint.
+
+**to run tests**
+
+php artisan test OR .vendor/bin/phpunit
+php artisan test --testsuite=Feature --stop-on-failure
+
+**creating a test**
+
+php artisan make:test UserTest 
+php artisan make:test UserTest --unit (by default, a feature test is created)
