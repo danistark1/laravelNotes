@@ -1,6 +1,6 @@
 # laravelNotes
 
-
+**Tips & Tricks** https://github.com/LaravelDaily/laravel-tips
 
 <details>
 <summary><b>Table of Contents</b></summary>
