@@ -6,6 +6,7 @@
 <summary><b>Table of Contents</b></summary>
  
  - [Creating a Project](#creating-a-project "Creating a Project")
+ - [Useful functions](#useful-functions "Useful unctions")
 
 </details>
 
@@ -40,6 +41,25 @@
 | ------------- | ------------- |
 | ------------- | ------------- |
 | ------------- | ------------- |
+
+### Useful functions
+
+data_get()
+
+IF you have a complex data structure with deeply nested objects/arrays, this ft. retrieves a values from a nested array or object using dot notation and wildcard.
+ex.
+
+```php
+$test  = [ 
+  0 => 
+	['user_id' =>'some user id', 'created_at' => 'some timestamp', 'product' => ["id" => 2]],
+  ['product' => ["id" => 2]] 
+
+];
+
+$result = data_get($test,  '*.product.id');
+```
+will retrieve alll product ids.
 
 ### Laravel version
 
@@ -957,6 +977,16 @@ When this is run, whatever jon in the jobs table will be executed, then removed 
 
 This should be configured as a cron job.
 
+**jobs can be used without a queue**
+
+```php
+public function approve(Article $article)
+{
+    //
+    $this->dispatchNow(new ApproveArticle($article));
+    //
+}
+```
 
 ### Unit Testing 
 
