@@ -304,6 +304,19 @@ head over to the newly created migration file, you can add new fields to the tab
  
  - php artisan migrate
 
+**foreign keys**
+
+```php
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+Schema::table('posts', function (Blueprint $table) {
+    $table->unsignedBigInteger('user_id');
+
+    $table->foreign('user_id')->references('id')->on('users');
+});
+```
+
 **rollback to previous migration**
 
 - php artisan migrate:rollback
