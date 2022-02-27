@@ -25,7 +25,8 @@
  - [Query Builder](#query-builder "Query Builder")
  - [Telescope Configuration](#telescope-configuration "Telescope Configuration")
  - [Scheduler](#scheduler "Scheduler")
- - [Queue](#queue "Queue")	
+ - [Queue](#queue "Queue")
+ - [UNit Testing](#unit-testing "Unit Testing")
 </details>
 
 ### Commands
@@ -1115,3 +1116,27 @@ class UserTableSeeder extends Seeder
 Now run this command to see data
 
 - php artisan db:seed --class=UserTableSeeder
+
+**factory callbacks**
+
+While using factories for seeding data, you can provide Factory Callback functions to perform some action after record is inserted.
+```php
+$factory->afterCreating(App\User::class, function ($user, $faker) {
+    $user->accounts()->save(factory(App\Account::class)->make());
+});
+```
+
+**generate images with seed factory**
+
+```php
+$factory->define(User::class, function (Faker $faker) {
+    return [
+        'name' => $faker->name,
+        'email' => $faker->unique()->safeEmail,
+        'email_verified_at' => now(),
+        'password' => bcrypt('password'),
+        'remember_token' => Str::random(10),
+        'avatar' => $faker->image(storage_path('images'), 50, 50)
+    ];
+});
+```
