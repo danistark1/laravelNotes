@@ -63,7 +63,7 @@
 
 ### Useful functions
 
-data_get()
+**data_get()**
 
 IF you have a complex data structure with deeply nested objects/arrays, this ft. retrieves a values from a nested array or object using dot notation and wildcard.
 ex.
@@ -79,6 +79,33 @@ $test  = [
 $result = data_get($test,  '*.product.id');
 ```
 will retrieve alll product ids.
+
+**group_by on collection**
+
+If you want to group result by some condition which isn’t a direct column in your database, you can do that by providing a closure function.
+
+For example, if you want to group users by day of registration, here’s the code:
+
+```php
+$users = User::all()->groupBy(function($item) {
+    return $item->created_at->format('Y-m-d');
+});
+```
+
+**logging all db queires during development**
+
+ add this snippet to your AppServiceProvider
+ 
+ ```php
+ public function boot()
+{
+    if (App::environment('local')) {
+        DB::listen(function ($query) {
+            logger(Str::replaceArray('?', $query->bindings, $query->sql));
+        });
+    }
+}
+```
 
 ### Laravel version
 
