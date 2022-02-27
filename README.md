@@ -5,9 +5,27 @@
 <details>
 <summary><b>Table of Contents</b></summary>
  
- - [Creating a Project](#creating-a-project "Creating a Project")
+ - [Commands](#commands "Commands")
  - [Useful functions](#useful-functions "Useful unctions")
-
+ - [Laravel version](#laravel-version "Laravel version")
+ - [Windows env mySQl](#windows-env-mysql "Windows env mySQl")
+ - [Creating a laravel project](#creating-a-laravel-project "Creating a laravel project")
+ - [Local artisan PHP server](#local-artisan-php-server "Local artisan PHP server")
+ - [Folder Structure](#folder-structure "Folder Structure")
+ - [Routes](#routes "Routes")
+ - [Controllers](#controllers "Controllers")
+ - [Views](#views "Views")
+ - [Migrations](#migrations "Migrations")
+ - [Raw SQL Queries](#raw-sql-queries "Raw SQL Queries")
+ - [Models](#models "Models")
+ - [Eloquent-ORM](#eloquent-orm "Eloquent-ORM")
+ - [Relationships](#relationships "Relationships")
+ - [Tinker](#tinker "Tinker")
+ - [Caching](#caching "Caching")
+ - [Query Builder](#query-builder "Query Builder")
+ - [Telescope Configuration](#telescope-configuration "Telescope Configuration")
+ - [Scheduler](#scheduler "Scheduler")
+ - [Queue](#queue "Queue")	
 </details>
 
 ### Commands
@@ -284,7 +302,7 @@ When you ship your application, you want users to know which application configu
 You can keep your sensitive passworrds and logins in .env for your local development.
 
 
-### Migration
+### Migrations
 
 **create table**
 Create a database, and set the correct credentials in .env file.
@@ -382,7 +400,7 @@ Model name will be the table name in the database, so if you create a Post model
 You can override the table name in the model by adding a protected property $table = 'tableName';
 You can also override $primaryKey the same way.
 
-### Eloquent / ORM
+### Eloquent-ORM
 
 **get**
 
@@ -1016,3 +1034,84 @@ php artisan test --testsuite=Feature --stop-on-failure
 
 php artisan make:test UserTest 
 php artisan make:test UserTest --unit (by default, a feature test is created)
+
+**factories & seeders**
+
+We create factories to generate some random data for testing.
+
+- php artisan make:factory UserFactory --model=User
+
+This will generate file in database/factory/UserFactory.php
+
+Now let's add fake data for each column.
+
+```php
+<?php
+
+namespace Database\Factories;
+
+use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class UserFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = User::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'remember_token' => Str::random(10),
+        ];
+    }
+}
+```
+
+Now Add a seeder For UserTable by running command below.
+
+- php artisan make:seed UserTableSeeder
+
+This command generate a file in database/seeders/UserTableSeeder.php
+
+Next Update the run function of seeder file.
+
+```php
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use App\Models\User;
+
+class UserTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        User::factory()->count(50)->create();
+    }
+}
+```
+
+Now run this command to see data
+
+- php artisan db:seed --class=UserTableSeeder
